@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+div#counter   {
+  text-align: center;
+  font-size: 60px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+div#labels
+{
+  text-align: center;
+  font-size: 25px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.seconds {
+  color: red;
+}
+
+</style>
+</head>
+<body>
+
+<div id="counter"></div>
+<div id="labels">&nbsp;  Days &nbsp;  Hours &nbsp;  Minutes &nbsp;  Seconds</div>
+
+
+<script>
+
+//set the frist time amount 
+var add_day= 1;
+var add_hours=1;
+var add_minutes=2;
+var add_seconds=30 ; 
+
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  var expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+
+
+var countDownDate = new Date();
+// adding days
+countDownDate.setDate(countDownDate.getDate() + add_day);
+// adding hours
+countDownDate.setHours(countDownDate.getHours() + add_hours);
+// adding minutes
+countDownDate.setMinutes(countDownDate.getMinutes() + add_minutes);
+// adding second 
+countDownDate.setSeconds(countDownDate.getSeconds() + add_seconds);
+// convert to timestamp fromat so we can add and sub 
+countDownDate = countDownDate.getTime();
+
+
+var check=getCookie("start_time");
+if(check>0)
+{
+  var timeshift = new Date().getTime() - check ;
+  if(timeshift > countDownDate)
+  {
+     var coockie_time=new Date().getTime() ;
+    setCookie("start_time",coockie_time,60);
+
+  }else
+  {
+  countDownDate=countDownDate-timeshift;
+  }
+}
+else
+{
+  var coockie_time=new Date().getTime() ;
+  setCookie("start_time",coockie_time,60);
+ 
+}
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+// count down is a date and time now 
+
+
+// Get todays date and time
+var now = new Date().getTime();
+// Set the date we're counting down to  
+distance = countDownDate - now;
+
+// Find the distance between now and the count down date
+  
+    
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+  // Output the result in an element with id="counter"
+  document.getElementById("counter").innerHTML =
+  "<span>" + days +"</span>"+ " : "+
+  "<span>" + hours + "</span>" +" : "+
+  "<span>" + minutes + "</span>" +" : "+
+  "<span class='seconds'>" + seconds + "</span>" ;
+  
+
+   if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("counter").innerHTML = "TIME IS OUT";
+  }
+    
+}, 1000);
+</script>
+
+</body>
+</html>
